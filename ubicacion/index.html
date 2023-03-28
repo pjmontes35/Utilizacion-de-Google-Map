@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>Maps</title>
+
+	<link rel="stylesheet" type="text/css" href="estilo.css">
+	<script type="TEXT/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAmAgMakD38Ul688PBs84KlIAEFVujWAoY"></script>
+</head>
+<body>
+	<div id="mapa" style="width:700px; height: 500px; "></div>
+	<script type="text/javascript">
+		
+				
+
+		var divMapa = document.getElementById('mapa');
+		navigator.geolocation.getCurrentPosition(fn_ok,fn_error);
+		//mostrar_objeto(navigator.geolocation);
+		function fn_ok(respuesta){
+			//mostrar_objeto(respuesta.coords);
+			//divMapa.innerHTML = 'Ingresa';
+			var lat = respuesta.coords.latitude;
+			var lon = respuesta.coords.longitude;
+			divMapa.innerHTML = lat+','+lon;
+
+			var gLatLon = new google.maps.LatLng(lat,lon);
+			var objConfig = {
+				zoom: 17,
+				center: gLatLon,
+
+
+			}
+			var gMapa = new google.maps.Map(divMapa, objConfig);
+			var objConfigMarker = {
+				position:gLatLon,
+				map:gMapa
+			}
+			var gMarker = new google.maps.Marker(objConfigMarker);
+
+			var gCoder = new google.maps.Geocoder();
+			var objInformacion = {
+
+				address: 'Corrientes 2049, Balvanera,Buenos Aires'
+			}
+
+				gCoder.geocode(objInformacion, fn_coder);
+			
+			function fn_coder(datos){
+
+				var coordenadas = datos[0].geometry.location; //Objeto Longitud Latitud
+				
+				var config = { 
+					map: gMapa,
+					position: coordenadas,
+					title: 'Escuela Da Vinci'
+				}
+				var gMarkerDV = new google.maps.Marker(config)
+					//gMarkerDV.setIcon('auto.png')
+
+
+			}
+
+
+		}
+		function fn_error(){
+			divMapa.innerHTML = 'No ingresa';
+		}
+
+		function mostrar_objeto(obj){
+			for (var prop in obj){
+				document.write(prop+' :'+obj[prop] + '<br />');
+			}
+
+		}
+
+
+	</script>
+<!--Aquí comienza el cuerpo de la página-->
+<!--<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAmAgMakD38Ul688PBs84KlIAEFVujWAoY&callback=iniciarMap"></script>-->
+</body>
+</html>
